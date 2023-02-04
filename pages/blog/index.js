@@ -10,7 +10,9 @@ export async function getServerSideProps(context) {
     apiVersion: "2022-03-25",
     useCdn: false,
   });
-  const posts = await client.fetch(`*[_type == "post"]`);
+  const posts = await client.fetch(
+    `*[_type == "post"] | order(publishedAt desc)`
+  );
   return {
     props: {
       posts,
@@ -33,7 +35,9 @@ const Posts = ({ posts }) => {
               className="text-white bg-[#3B3B3C] h-72 flex flex-col justify-between py-6 px-6 border-[1px] border-[#3B3B3C] rounded-md"
             >
               <h2 className="text-2xl font-bold pb-4">{post.title}</h2>
-              <p className="text-sm">{post.publishedAt}</p>
+              <p className="text-sm">
+                {new Date(post.publishedAt).toDateString()}
+              </p>
             </Link>
           ))}
         </article>

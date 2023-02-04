@@ -1,13 +1,8 @@
 import Head from "next/head";
 import { createClient } from "next-sanity";
 import Link from "next/link";
-import PortableText from "react-portable-text";
 
 export default function Home({ posts }) {
-  console.log(posts);
-  // let date = new Date(posts[0].publishedAt);
-  // date.toDateString();
-  // console.log(date);
   return (
     <>
       <Head>
@@ -29,7 +24,9 @@ export default function Home({ posts }) {
               className="text-white bg-[#3B3B3C] h-72 flex flex-col justify-between py-6 px-6 border-[1px] border-[#3B3B3C] rounded-md"
             >
               <h2 className="text-2xl font-bold pb-4">{post.title}</h2>
-              <p className="text-sm">{post.publishedAt}</p>
+              <p className="text-sm">
+                {new Date(post.publishedAt).toDateString()}
+              </p>
             </Link>
           ))}
         </article>
@@ -45,7 +42,10 @@ export async function getServerSideProps(context) {
     apiVersion: "2022-03-25",
     useCdn: false,
   });
-  const posts = await client.fetch(`*[_type == "post"][0...9]`);
+  const posts = await client.fetch(
+    `*[_type == "post"][0...9] | order(publishedAt desc)`
+  );
+
   return {
     props: {
       posts,
