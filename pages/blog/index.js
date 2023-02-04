@@ -3,24 +3,28 @@ import { createClient } from "next-sanity";
 import Link from "next/link";
 import PortableText from "react-portable-text";
 
-export default function Home({ posts }) {
-  console.log(posts);
-  // let date = new Date(posts[0].publishedAt);
-  // date.toDateString();
-  // console.log(date);
+export async function getServerSideProps(context) {
+  const client = createClient({
+    projectId: "006wvq76",
+    dataset: "production",
+    apiVersion: "2022-03-25",
+    useCdn: false,
+  });
+  const posts = await client.fetch(`*[_type == "post"]`);
+  return {
+    props: {
+      posts,
+    }, // will be passed to the page component as props
+  };
+}
+
+const Posts = ({ posts }) => {
   return (
     <>
       <Head>
-        <title>Home Page | LEX BLOG</title>
+        <title>Blogs | LEX BLOG</title>
       </Head>
       <section className="text-white pt-10 px-5 xl:px-16">
-        <h1 className="text-4xl font-bebas font-bold text-center">
-          Welcome to LEX BLOG.
-        </h1>
-        <p className="font-poppins py-4 text-center">
-          A Blog Built with Nextjs and Sanity For Content Management.
-        </p>
-
         <article className="grid grid-cols-1 gap-4 my-7 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link
@@ -36,19 +40,6 @@ export default function Home({ posts }) {
       </section>
     </>
   );
-}
+};
 
-export async function getServerSideProps(context) {
-  const client = createClient({
-    projectId: "006wvq76",
-    dataset: "production",
-    apiVersion: "2022-03-25",
-    useCdn: false,
-  });
-  const posts = await client.fetch(`*[_type == "post"][0...9]`);
-  return {
-    props: {
-      posts,
-    }, // will be passed to the page component as props
-  };
-}
+export default Posts;
