@@ -7,7 +7,7 @@ const Navar = () => {
         <h1 className="text-2xl font-bebas">LEX BLOG</h1>
       </Link>
       <section className="flex gap-2 text-xs font-poppins md:gap-5">
-        <Link href="/blog">
+        <Link href="/post">
           <p>BLOG</p>
         </Link>
         <Link href="/about">

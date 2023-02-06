@@ -13,18 +13,20 @@ export default function Home({ posts }) {
           Welcome to LEX BLOG.
         </h1>
         <p className="font-poppins py-4 text-center">
-          A Blog Built with Nextjs and Sanity For Content Management.
+          A Blog Site Built with Nextjs and Sanity For Content Management.
         </p>
 
         <article className="grid grid-cols-1 gap-4 my-7 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
+          {posts?.map((post) => (
             <Link
-              href={"/blog/" + post.slug.current}
+              href={"/post/" + post.slug.current}
               key={post._id}
               className="text-white bg-[#3B3B3C] h-72 flex flex-col justify-between py-6 px-6 border-[1px] border-[#3B3B3C] rounded-md"
             >
-              <h2 className="text-2xl font-bold pb-4">{post.title}</h2>
-              <p className="text-sm">
+              <h2 className="text-2xl font-bold font-poppins pb-4">
+                {post.title}
+              </h2>
+              <p className="text-sm font-poppins">
                 {new Date(post.publishedAt).toDateString()}
               </p>
             </Link>
@@ -37,7 +39,7 @@ export default function Home({ posts }) {
 
 export async function getServerSideProps(context) {
   const client = createClient({
-    projectId: "006wvq76",
+    projectId: process.env.ID,
     dataset: "production",
     apiVersion: "2022-03-25",
     useCdn: false,
@@ -49,6 +51,6 @@ export async function getServerSideProps(context) {
   return {
     props: {
       posts,
-    }, // will be passed to the page component as props
+    },
   };
 }
